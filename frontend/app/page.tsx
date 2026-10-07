@@ -1,4 +1,6 @@
 import "./globals.css";
+import Link from "next/link";
+import ThemeToggle from "./theme-toggle";
 
 export default function Home() {
   return (
@@ -9,7 +11,10 @@ export default function Home() {
           Influ<span>Enhance</span>
         </div>
 
-        <button className="navButton">Get Started</button>
+        <div className="navActions">
+          <ThemeToggle />
+          <Link className="navButton" href="/login">Get Started</Link>
+        </div>
       </nav>
 
       {/* Hero */}
@@ -28,7 +33,7 @@ export default function Home() {
           </p>
 
           <div className="buttons">
-            <button className="primaryButton">Get Started</button>
+            <Link className="primaryButton" href="/login">Get Started</Link>
             <button className="secondaryButton">Learn More</button>
           </div>
         </div>
@@ -71,7 +76,7 @@ export default function Home() {
       <section className="cta">
         <p className="eyebrow">READY TO GET STARTED?</p>
         <h2>Take your influence to the next level.</h2>
-        <button className="primaryButton">Get Started</button>
+        <Link className="primaryButton" href="/login">Get Started</Link>
       </section>
 
       <footer>
