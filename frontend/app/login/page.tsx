@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import ThemeToggle from "../theme-toggle";
 
@@ -9,6 +10,7 @@ type LoginResponse = {
 };
 
 export default function LoginPage() {
+  const router = useRouter();
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -25,6 +27,7 @@ export default function LoginPage() {
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({
             email: formData.get("email"),
             password: formData.get("password"),
@@ -32,7 +35,12 @@ export default function LoginPage() {
         },
       );
       const result = (await response.json()) as LoginResponse;
-      setMessage(result.message ?? "The login request could not be completed.");
+      if (response.ok) {
+        router.push("/");
+        router.refresh();
+      } else {
+        setMessage(result.message ?? "The login request could not be completed.");
+      }
     } catch {
       setMessage("Could not reach the login service. Make sure the backend is running.");
     } finally {
@@ -85,7 +93,7 @@ export default function LoginPage() {
 
         {message && <p className="loginMessage" role="status">{message}</p>}
         <p className="loginNote">
-          New to InfluEnhance? <Link href="/">Explore the platform</Link>
+          New to InfluEnhance? <Link href="/signup">Create an account</Link>
         </p>
       </section>
     </main>

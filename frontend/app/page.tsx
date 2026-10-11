@@ -1,8 +1,26 @@
-import "./globals.css";
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import ThemeToggle from "./theme-toggle";
 
 export default function Home() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const getStartedHref = isAuthenticated === false ? "/login" : "#features";
+
+  useEffect(() => {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+    fetch(`${apiUrl}/api/session`, { credentials: "include" })
+      .then((response) => response.json())
+      .then((result: { authenticated?: boolean }) => {
+        setIsAuthenticated(result.authenticated === true);
+      })
+      .catch((error: unknown) => {
+        console.error("Could not check the current login session:", error);
+        setIsAuthenticated(false);
+      });
+  }, []);
+
   return (
     <main className="page">
       {/* Navigation */}
@@ -13,7 +31,7 @@ export default function Home() {
 
         <div className="navActions">
           <ThemeToggle />
-          <Link className="navButton" href="/login">Get Started</Link>
+          <Link className="navButton" href={getStartedHref}>Get Started</Link>
         </div>
       </nav>
 
@@ -33,7 +51,7 @@ export default function Home() {
           </p>
 
           <div className="buttons">
-            <Link className="primaryButton" href="/login">Get Started</Link>
+            <Link className="primaryButton" href={getStartedHref}>Get Started</Link>
             <button className="secondaryButton">Learn More</button>
           </div>
         </div>
@@ -46,7 +64,7 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="features">
+      <section className="features" id="features">
         <div className="feature">
           <div className="icon">↗</div>
           <h3>Grow</h3>
@@ -76,7 +94,7 @@ export default function Home() {
       <section className="cta">
         <p className="eyebrow">READY TO GET STARTED?</p>
         <h2>Take your influence to the next level.</h2>
-        <Link className="primaryButton" href="/login">Get Started</Link>
+        <Link className="primaryButton" href={getStartedHref}>Get Started</Link>
       </section>
 
       <footer>

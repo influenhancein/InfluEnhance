@@ -2,6 +2,7 @@ const http = require("node:http");
 const authRoutes = require("./routes/authRoutes");
 const applyCors = require("./middleware/cors");
 const sendJson = require("./middleware/sendJson");
+const { connectDatabase } = require("./config/database");
 
 const port = Number(process.env.PORT ?? 4000);
 const frontendOrigin = process.env.FRONTEND_ORIGIN ?? "http://localhost:3000";
@@ -32,11 +33,19 @@ const server = http.createServer(async (request, response) => {
   sendJson(response, 404, { message: "Route not found." });
 });
 
-server.listen(port, () => {
-  console.log(`InfluEnhance API listening on port ${port}`);
-});
-
 server.on("error", (error) => {
   console.error("Failed to start the InfluEnhance API:", error);
+  process.exitCode = 1;
+});
+
+async function startServer() {
+  await connectDatabase();
+  server.listen(port, () => {
+    console.log(`InfluEnhance API listening on port ${port}`);
+  });
+}
+
+startServer().catch((error) => {
+  console.error("Failed to connect to the database:", error);
   process.exitCode = 1;
 });

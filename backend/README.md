@@ -12,13 +12,19 @@ Run the Node.js backend from this folder:
 npm start
 ```
 
-The API reads `PORT` and `FRONTEND_ORIGIN` from `.env`. Set
-`NEXT_PUBLIC_API_URL` in the frontend's `.env.local` to point it at the
-deployed API; `frontend/.env.example` shows the local default.
+The API reads `PORT`, `FRONTEND_ORIGIN`, `MONGODB_URI`, `MONGODB_DB`, and
+`SESSION_SECRET` from `.env`. The local defaults connect to MongoDB at
+`127.0.0.1:27017` and use the `influenhance` database. Ensure the local MongoDB
+service is running before starting the backend. Accounts are stored in the
+`users` collection, with passwords hashed before they are saved. Use a random
+session secret of at least 32 characters. Set `NEXT_PUBLIC_API_URL` in the
+frontend's `.env.local` to point at the deployed API;
+`frontend/.env.example` shows the local default.
 
 - `GET /api/health` checks that the API is running.
-- `POST /api/login` is handled in `routes/authRoutes.js`.
-- Shared request handling is in `middleware/`.
-
-The login endpoint is a scaffold only; it does not authenticate users or create
-sessions until an authentication provider and user store are configured.
+- `POST /api/signup` creates an account and starts a session.
+- `POST /api/login` verifies an account and starts a session.
+- `GET /api/session` checks the current session; `POST /api/logout` clears it.
+- Database configuration and connection are in `config/database.js`.
+- API endpoints are grouped in `routes/`; shared request handling is in
+  `middleware/`.

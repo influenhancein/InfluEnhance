@@ -418,6 +418,13 @@ footer {
   text-align: center;
 }
 
+.passwordHint {
+  margin-top: -4px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
 /* =========================
    Mobile
 ========================= */

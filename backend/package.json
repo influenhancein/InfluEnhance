@@ -4,7 +4,10 @@
   "private": true,
   "description": "Node.js API for InfluEnhance",
   "scripts": {
-    "start": "node server.js",
+    "start": "node --env-file-if-exists=.env server.js",
     "dev": "node --watch --env-file-if-exists=.env server.js"
+  },
+  "dependencies": {
+    "mongodb": "^7.7.0"
   }
 }

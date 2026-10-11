@@ -2,6 +2,7 @@ module.exports = function applyCors(request, response, allowedOrigin) {
   response.setHeader("Access-Control-Allow-Origin", allowedOrigin);
   response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   response.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  response.setHeader("Access-Control-Allow-Credentials", "true");
   response.setHeader("Vary", "Origin");
 
   if (request.method !== "OPTIONS") {
